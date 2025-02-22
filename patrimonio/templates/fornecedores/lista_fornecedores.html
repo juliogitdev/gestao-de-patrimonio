@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Fornecedores{% endblock %}
+
+{% block content %}
+    <h2>Fornecedores</h2>
+    <a href="{% url 'adicionar_fornecedor' %}">Adicionar Fornecedor</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CNPJ</th>
+                <th>Endereço</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fornecedor in fornecedores %}
+            <tr>
+                <td>{{ fornecedor.nome }}</td>
+                <td>{{ fornecedor.cnpj }}</td>
+                <td>{{ fornecedor.endereco }}</td>
+                <td>
+                    <a href="{% url 'editar_fornecedor' fornecedor.id %}">Editar</a>
+                    <a href="{% url 'excluir_fornecedor' fornecedor.id %}">Excluir</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Relatório de Bens</h2>
+  <table border="1">
+    <tr>
+      <th>Nome</th>
+      <th>Categoria</th>
+      <th>Status</th>
+      <th>Valor</th>
+    </tr>
+    {% for bem in bens %}
+    <tr>
+      <td>{{ bem.nome }}</td>
+      <td>{{ bem.categoria }}</td>
+      <td>{{ bem.status }}</td>
+      <td>R$ {{ bem.valor }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <a href="{% url 'listar_bens' %}">Voltar para a lista de bens</a>
+{% endblock %}

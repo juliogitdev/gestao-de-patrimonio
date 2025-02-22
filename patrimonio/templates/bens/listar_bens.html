@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Lista de Bens</h2>
+  <table border="1">
+    <tr>
+      <th>Nome</th>
+      <th>Categoria</th>
+      <th>Departamento</th>
+      <th>Valor</th>
+      <th>Ações</th>
+    </tr>
+    {% for bem in bens %}
+    <tr>
+      <td>{{ bem.nome }}</td>
+      <td>{{ bem.categoria }}</td>
+      <td>{{ bem.departamento }}</td>
+      <td>R$ {{ bem.valor }}</td>
+      <td>
+        <a href="{% url 'detalhar_bem' bem.id %}">Detalhes</a> |
+        <a href="{% url 'atualizar_bem' bem.id %}">Editar</a> |
+        <a href="{% url 'deletar_bem' bem.id %}">Excluir</a> |
+        <a href="{% url 'registrar_movimentacao'%}">Movimentar</a> 
+      </td>
+    </tr> 
+    {% endfor %}
+  </table>
+  <a href="{% url 'criar_bem' %}">Adicionar Novo Bem</a>
+{% endblock %}
