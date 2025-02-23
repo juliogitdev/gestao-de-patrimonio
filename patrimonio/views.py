@@ -3,10 +3,13 @@ from .models import Categoria, Fornecedor, Departamento, Bem, Movimentacao
 from .forms import CategoriaForm, FornecedorForm, DepartamentoForm, BemForm, MovimentacaoForm
 from datetime import timedelta
 from django.utils import timezone
+from django.db.models import Sum
 
 
 def inicio(request):
     total_bens = Bem.objects.count()
+
+    patrimonio_total = Bem.objects.aggregate(Sum('valor'))['valor__sum'] or 0  # Calculando o total do patrimônio
     
     # Consultando bens em manutenção
     bens_em_manutencao = Bem.objects.filter(status='em manutenção').count()
@@ -24,7 +27,8 @@ def inicio(request):
     total_categorias = Categoria.objects.count()
 
     contexto = {
-        'patrimonio_total': total_bens,
+        'patrimonio_total': patrimonio_total,
+        'total_bens': total_bens,
         'bens_em_manutencao': bens_em_manutencao,
         'bens_movimentados_recentemente': len(movimentacoes_recent),
         'total_movimentacoes': total_movimentacoes,
@@ -174,3 +178,39 @@ def excluir_categoria(request, id):
         categoria.delete()
         return redirect('lista_categorias')
     return render(request, 'categorias/confirmar_exclusao_categoria.html', {'categoria': categoria})
+
+# Listar todos os departamentos
+def listar_departamentos(request):
+    departamentos = Departamento.objects.all()
+    return render(request, 'departamentos/listar_departamentos.html', {'departamentos': departamentos})
+
+# Adicionar um novo departamento
+def adicionar_departamento(request):
+    if request.method == 'POST':
+        form = DepartamentoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_departamentos')
+    else:
+        form = DepartamentoForm()
+    return render(request, 'departamentos/form_departamento.html', {'form': form})
+
+# Editar um departamento existente
+def editar_departamento(request, id):
+    departamento = get_object_or_404(Departamento, id=id)
+    if request.method == 'POST':
+        form = DepartamentoForm(request.POST, instance=departamento)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_departamentos')
+    else:
+        form = DepartamentoForm(instance=departamento)
+    return render(request, 'departamentos/form_departamento.html', {'form': form})
+
+# Excluir um departamento
+def excluir_departamento(request, id):
+    departamento = get_object_or_404(Departamento, id=id)
+    if request.method == 'POST':
+        departamento.delete()
+        return redirect('listar_departamentos')
+    return render(request, 'departamentos/confirmar_exclusao_departamento.html', {'departamento': departamento})

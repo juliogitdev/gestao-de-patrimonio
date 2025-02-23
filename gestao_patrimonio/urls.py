@@ -27,5 +27,9 @@ urlpatterns = [
     path('categorias/adicionar/', views.adicionar_categoria, name='adicionar_categoria'),
     path('categorias/editar/<int:id>/', views.editar_categoria, name='editar_categoria'),
     path('categorias/excluir/<int:id>/', views.excluir_categoria, name='excluir_categoria'),
+    path('departamentos/', views.listar_departamentos, name='listar_departamentos'),
+    path('departamento/adicionar/', views.adicionar_departamento, name='adicionar_departamento'),
+    path('departamento/editar/<int:id>/', views.editar_departamento, name='editar_departamento'),
+    path('departamento/excluir/<int:id>/', views.excluir_departamento, name='excluir_departamento'),
 ]
 

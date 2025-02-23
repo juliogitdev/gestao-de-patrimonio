@@ -1,5 +1,6 @@
 from django import forms
 from .models import Categoria, Fornecedor, Departamento, Bem, Movimentacao
+import re
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
@@ -14,7 +15,21 @@ class FornecedorForm(forms.ModelForm):
     class Meta:
         model = Fornecedor
         fields = ['nome', 'endereco', 'telefone', 'email']
-        telefone = forms.CharField(required=True, max_length=15)
+
+    telefone = forms.CharField(
+        widget=forms.TextInput(attrs={'type': 'tel', 'pattern': '[0-9]*'}),
+        max_length=15,  # Limite de caracteres para o telefone
+        error_messages={
+            'invalid': 'Por favor, insira um número de telefone válido (somente números).'
+        }
+    )
+
+    def clean_telefone(self):
+        telefone = self.cleaned_data['telefone']
+        # Verifica se o telefone contém apenas números
+        if not re.match(r'^[0-9]+$', telefone):
+            raise forms.ValidationError('O telefone deve conter apenas números.')
+        return telefone
 
 class DepartamentoForm(forms.ModelForm):
     class Meta:

@@ -1,0 +1,17 @@
+<!-- form_departamento.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>{% if form.instance.pk %}Editar Departamento{% else %}Adicionar Novo Departamento{% endif %}</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">
+      {% if form.instance.pk %} Atualizar Departamento {% else %} Adicionar Departamento {% endif %}
+    </button>
+  </form>
+
+  <br>
+  <a href="{% url 'listar_departamentos' %}" class="btn btn-secondary">Voltar para a lista</a>
+{% endblock %}

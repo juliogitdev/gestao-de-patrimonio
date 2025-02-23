@@ -39,7 +39,7 @@ class Bem(models.Model):
     descricao = models.TextField(blank=True, null=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.SET_NULL, null=True, blank=True)
-    departamento = models.ForeignKey(Departamento, on_delete=models.SET_NULL, null=True, blank=True)
+    departamento = models.ForeignKey(Departamento, on_delete=models.SET_NULL, null=True, blank=True)  # Alterando para ForeignKey
     rfid = models.CharField(max_length=100, unique=True)  # RFID como o único identificador
     valor = models.DecimalField(max_digits=10, decimal_places=2)
     data_aquisicao = models.DateField() 
@@ -47,7 +47,6 @@ class Bem(models.Model):
 
     def __str__(self):
         return f'{self.nome} ({self.rfid})'  # Usando RFID no lugar do número de série
-    
 
 class Movimentacao(models.Model):
     TIPOS_MOVIMENTACAO = [
