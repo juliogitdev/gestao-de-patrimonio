@@ -25,7 +25,7 @@ Este projeto é um sistema de gestão de patrimônio desenvolvido em Django. Ele
 Clone o repositório do projeto para sua máquina local:
 
 ```bash
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
+git clone https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/juliogitdev/gestao-de-patrimonio
 ```
 2. Instalar dependências
 Após clonar o repositório, entre no diretório do projeto e instale as dependências necessárias com o pip:
