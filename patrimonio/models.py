@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 
+
 # Tabela Categoria
 class Categoria(models.Model):
     nome = models.CharField(max_length=100, unique=True)
@@ -58,4 +59,10 @@ class Movimentacao(models.Model):
     tipo = models.CharField(max_length=7, choices=TIPOS_MOVIMENTACAO)
     rfid = models.CharField(max_length=255)
     data = models.DateTimeField(default=timezone.now)
+
+    def save(self, *args, **kwargs):
+        # Validação para garantir que o RFID da movimentação corresponda ao RFID do bem
+        if self.bem.rfid != self.rfid:
+            raise ValueError("O RFID da movimentação não corresponde ao RFID do bem.")
+        super().save(*args, **kwargs)
 

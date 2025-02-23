@@ -3,11 +3,17 @@
 {% block title %}Confirmar Exclusão{% endblock %}
 
 {% block content %}
-    <h2>Confirmar Exclusão</h2>
-    <p>Você tem certeza que deseja excluir o fornecedor "{{ fornecedor.nome }}"?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Sim, excluir</button>
-        <a href="{% url 'lista_fornecedores' %}">Cancelar</a>
-    </form>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Confirmar Exclusão</h2>
+    
+    <div class="card shadow-sm p-4">
+        <p class="lead">Você tem certeza que deseja excluir o fornecedor "{{ fornecedor.nome }}"?</p>
+
+        <form method="post" class="d-flex justify-content-between">
+            {% csrf_token %}
+            <a href="{% url 'lista_fornecedores' %}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-danger">Sim, excluir</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

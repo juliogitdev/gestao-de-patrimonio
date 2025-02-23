@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Registrar Movimentação de Bem</h1>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Registrar Movimentação</button>
-  </form>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Registrar Movimentação de Bem</h1>
+
+    <form method="POST" class="form-horizontal">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Registrar Movimentação</button>
+    </form>
+</div>
 {% endblock %}

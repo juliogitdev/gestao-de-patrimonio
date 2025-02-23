@@ -3,10 +3,15 @@
 {% block title %}Lista de Fornecedores{% endblock %}
 
 {% block content %}
-    <h2>Fornecedores</h2>
-    <a href="{% url 'adicionar_fornecedor' %}">Adicionar Fornecedor</a>
-    <table>
-        <thead>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Fornecedores</h2>
+
+    <div class="mb-3 text-right">
+        <a href="{% url 'adicionar_fornecedor' %}" class="btn btn-success">Adicionar Fornecedor</a>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
             <tr>
                 <th>Nome</th>
                 <th>CNPJ</th>
@@ -21,11 +26,16 @@
                 <td>{{ fornecedor.cnpj }}</td>
                 <td>{{ fornecedor.endereco }}</td>
                 <td>
-                    <a href="{% url 'editar_fornecedor' fornecedor.id %}">Editar</a>
-                    <a href="{% url 'excluir_fornecedor' fornecedor.id %}">Excluir</a>
+                    <a href="{% url 'editar_fornecedor' fornecedor.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'excluir_fornecedor' fornecedor.id %}" class="btn btn-danger btn-sm">Excluir</a>
                 </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Nenhum fornecedor registrado.</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
 {% endblock %}

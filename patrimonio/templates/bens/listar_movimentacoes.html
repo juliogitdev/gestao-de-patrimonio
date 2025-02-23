@@ -1,24 +1,49 @@
-<!-- lista_movimentacoes.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Lista de Movimentações</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Bem</th>
-        <th>Tipo</th>
-        <th>Data</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for movimentacao in movimentacoes %}
-        <tr>
-          <td>{{ movimentacao.bem.nome }}</td>
-          <td>{{ movimentacao.tipo }}</td>
-          <td>{{ movimentacao.data }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Relatório de Movimentações</h1>
+
+    <!-- Formulário de Pesquisa -->
+    <form method="get" action="{% url 'lista_movimentacoes' %}" class="mb-3">
+        <div class="form-group">
+            <label for="rfid">Pesquisar por RFID:</label>
+            <input type="text" id="rfid" name="rfid" class="form-control" placeholder="Digite o RFID" value="{{ request.GET.rfid }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Pesquisar</button>
+    </form>
+
+    <!-- Botão de Registrar Movimentação -->
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'registrar_movimentacao' %}" class="btn btn-success btn-sm">
+            <i class="fas fa-plus"></i> Registrar Movimentação
+        </a>
+    </div>
+
+    <!-- Tabela de Movimentações -->
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Bem</th>
+                <th>Tipo</th>
+                <th>RFID</th>
+                <th>Data e Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movimentacao in movimentacoes %}
+            <tr>
+                <td>{{ movimentacao.bem.nome }}</td>
+                <td>{{ movimentacao.tipo }}</td>
+                <td>{{ movimentacao.rfid }}</td>
+                <td>{{ movimentacao.data }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Nenhuma movimentação registrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

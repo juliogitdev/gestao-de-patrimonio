@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
+
 {% block content %}
-  <h2>Excluir Bem</h2>
-  <p>Tem certeza que deseja excluir "{{ bem.nome }}"?</p>
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Confirmar Exclusão</button>
-  </form>
-  <a href="{% url 'listar_bens' %}">Cancelar</a>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Excluir Bem</h2>
+
+    <p class="text-center">Tem certeza que deseja excluir o bem "{{ bem.nome }}"?</p>
+
+    <form method="post" class="text-center">
+        {% csrf_token %}
+        
+        <!-- Botão de confirmação de exclusão -->
+        <button type="submit" class="btn btn-danger btn-lg">Confirmar Exclusão</button>
+    </form>
+
+    <div class="mt-3 text-center">
+        <a href="{% url 'bens' %}" class="btn btn-secondary btn-lg">Cancelar</a>
+    </div>
+</div>
 {% endblock %}

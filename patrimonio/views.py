@@ -1,7 +1,40 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Categoria, Fornecedor, Departamento, Bem, Movimentacao
 from .forms import CategoriaForm, FornecedorForm, DepartamentoForm, BemForm, MovimentacaoForm
-import datetime
+from datetime import timedelta
+from django.utils import timezone
+
+
+def inicio(request):
+    total_bens = Bem.objects.count()
+    
+    # Consultando bens em manutenção
+    bens_em_manutencao = Bem.objects.filter(status='em manutenção').count()
+    
+    # Consultando bens recentemente movimentados (últimos 7 dias)
+    movimentacoes_recent = Movimentacao.objects.filter(data__gte=timezone.now() - timedelta(days=7))
+    
+    # Consultando total de movimentações
+    total_movimentacoes = Movimentacao.objects.count()
+    
+    # Consultando fornecedores cadastrados
+    total_fornecedores = Fornecedor.objects.count()
+    
+    # Consultando categorias de bens
+    total_categorias = Categoria.objects.count()
+
+    contexto = {
+        'patrimonio_total': total_bens,
+        'bens_em_manutencao': bens_em_manutencao,
+        'bens_movimentados_recentemente': len(movimentacoes_recent),
+        'total_movimentacoes': total_movimentacoes,
+        'total_fornecedores': total_fornecedores,
+        'total_categorias': total_categorias,
+        'movimentacoes_recent': movimentacoes_recent,
+    }
+
+    return render(request, 'inicio.html', contexto)
+
 # Listar todos os bens
 def listar_bens(request):
     bens = Bem.objects.all()
@@ -13,7 +46,7 @@ def criar_bem(request):
         form = BemForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('listar_bens')
+            return redirect('bens')
         else:
             print(form.errors)  # Imprime os erros no terminal
             return render(request, 'bens/criar_bem.html', {'form': form})
@@ -34,7 +67,7 @@ def atualizar_bem(request, pk):
         form = BemForm(request.POST, instance=bem)
         if form.is_valid():
             form.save()
-            return redirect('listar_bens')
+            return redirect('bens')
     else:
         form = BemForm(instance=bem)
     return render(request, 'bens/atualizar_bem.html', {'form': form})
@@ -44,7 +77,7 @@ def deletar_bem(request, pk):
     bem = get_object_or_404(Bem, pk=pk)
     if request.method == 'POST':
         bem.delete()
-        return redirect('listar_bens')
+        return redirect('bens')
     return render(request, 'bens/deletar_bem.html', {'bem': bem})
 
 def registrar_movimentacao(request):
@@ -52,34 +85,31 @@ def registrar_movimentacao(request):
         form = MovimentacaoForm(request.POST)
         if form.is_valid():
             form.save()  # Salva a movimentação no banco de dados
-            return redirect('lista_movimentacoes')  # Redireciona para a lista de movimentações
+            return redirect('inicio') 
     else:
         form = MovimentacaoForm()
 
     return render(request, 'bens/registrar_movimentacao.html', {'form': form})
 
 
-def dashboard(request):
-    # Exemplificando como obter dados para o dashboard
-    total_ativos = Bem.objects.filter(status='ativo').count()
-    total_inativos = Bem.objects.filter(status='inativo').count()
-    total_manutencao = Bem.objects.filter(status='em manutenção').count()
-    total_movimentacoes = Movimentacao.objects.count()
-
-    return render(request, 'bens/dashboard.html', {
-        'total_ativos': total_ativos,
-        'total_inativos': total_inativos,
-        'total_manutencao': total_manutencao,
-        'total_movimentacoes': total_movimentacoes,
-    })
 
 def relatorio(request):
     bens = Bem.objects.all()
     return render(request, 'bens/relatorio.html', {'bens': bens})
 
 def lista_movimentacoes(request):
-    movimentacoes = Movimentacao.objects.all().order_by('-data')
-    return render(request, 'bens/lista_movimentacoes.html', {'movimentacoes': movimentacoes})
+       # Captura o RFID do parâmetro de consulta
+    rfid = request.GET.get('rfid', '')
+
+    # Filtra as movimentações com base no RFID (caso fornecido)
+    if rfid:
+        movimentacoes = Movimentacao.objects.filter(rfid__icontains=rfid)
+    else:
+        movimentacoes = Movimentacao.objects.all()
+
+    return render(request, 'bens/listar_movimentacoes.html', {
+        'movimentacoes': movimentacoes
+    })
 
 def lista_fornecedores(request):
     fornecedores = Fornecedor.objects.all()
