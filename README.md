@@ -30,7 +30,7 @@ git clone https://github.com/juliogitdev/gestao-de-patrimonio
 2. Instalar dependências
 Após clonar o repositório, entre no diretório do projeto e instale as dependências necessárias com o pip:
 ```bash
-cd nome-do-repositorio
+cd gestao-de-patrimonio
 pip install -r requirements.txt
 ```
 3. Migrate para o banco de dados
